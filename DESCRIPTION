@@ -1,0 +1,21 @@
+Package: repenvr
+Title: REProducible ENVironments for R projects
+Version: 0.0.0.9000
+Authors@R:
+    person("Joan", "Kant", , "joan.kant@uhn.ca", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0007-1837-5854"))
+Description: What the package does (one paragraph).
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3.9000
+Imports:
+    devtools,
+    NCmisc,
+    pak,
+    tidyverse,
+    lintr,
+    testthat
+Remotes:
+    joan-yanqiong/pak@cran-0.5.1
