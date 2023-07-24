@@ -6,8 +6,7 @@
 #' @return dataframe with requirements
 #' @export
 #' @examples examples create_requirements("~/Coding/R", "~/Coding/reqs")
-#' @import dplyr
-#' @import stringr
+#' @import tidyverse
 create_reqs <- function(project_dir, output_dir) {
     # Load additional libraries
     all_files <- list.files(project_dir, recursive = TRUE, full.names = TRUE)

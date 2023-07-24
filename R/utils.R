@@ -2,7 +2,7 @@
 #'
 #' @param path_to_script path to script for which you want the functions
 #' @return list of functions that are not from an existing package
-#'
+#' @import NCmisc
 get_functions_from_unknown_pkgs <- function(path_to_script) {
     # those for which a package could not be found- may be functions within
     # functions, or from packages that aren't loaded.

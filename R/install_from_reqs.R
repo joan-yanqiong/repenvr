@@ -2,7 +2,7 @@
 #'
 #' @param req_path path to requirements file
 #' @export
-#' @import dplyr
+#' @import tidyverse
 install_from_reqs <- function(req_path) {
     if (!file.exists(req_path)) {
         stop("Invalid path to requirements file.")
