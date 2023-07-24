@@ -16,6 +16,8 @@ Imports:
     pak,
     tidyverse,
     lintr,
-    testthat
+    testthat,
+    dplyr,
+    stringr,
 Remotes:
     joan-yanqiong/pak@cran-0.5.1
