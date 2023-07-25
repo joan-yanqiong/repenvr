@@ -22,8 +22,9 @@ find_pkg_for_function <- function(function_name, lib.loc = .libPaths()) {
 #
 #' @examples get_pkgs("loaded")
 #' @export
+#' @importFrom devtools session_info
 get_pkgs <- function(pkgs = c("loaded", "attached", "installed")[1], include_base = TRUE) {
-    return(devtools::session_info(pkgs = pkgs, info = "packages", include_base = include_base)$packages$package)
+    return(session_info(pkgs = pkgs, info = "packages", include_base = include_base)$packages$package)
 }
 
 #' Get list of implicit packages

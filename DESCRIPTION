@@ -9,15 +9,16 @@ License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3.9000
+RoxygenNote: 7.2.3
 Imports:
     devtools,
     NCmisc,
     pak,
-    tidyverse,
-    lintr,
-    testthat,
-    dplyr,
     stringr,
+    dplyr,
+    tidyr,
 Remotes:
     joan-yanqiong/pak@cran-0.5.1
+Suggests:
+    testthat,
+    lintr

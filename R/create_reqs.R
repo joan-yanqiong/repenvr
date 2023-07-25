@@ -6,8 +6,11 @@
 #' @return dataframe with requirements
 #' @export
 #' @examples examples create_requirements("~/Coding/R", "~/Coding/reqs")
-#' @import tidyverse
-create_reqs <- function(project_dir, output_dir) {
+#' @importFrom dplyr %>% mutate
+#' @importFrom stringr str_extract_all
+#' @importFrom tidyr separate
+#' @importFrom devtools session_info
+create_requirements <- function(project_dir, output_dir) {
     # Load additional libraries
     all_files <- list.files(project_dir, recursive = TRUE, full.names = TRUE)
     script_files <- all_files[endsWith(all_files, ".R")]
@@ -18,14 +21,14 @@ create_reqs <- function(project_dir, output_dir) {
     loaded_pkgs <- get_pkgs("loaded")
     used_pkgs <- unique(c(loaded_pkgs, implicit_pkgs))
 
-    installed_pkgs <- data.frame(devtools::session_info())
+    installed_pkgs <- data.frame(session_info())
     reqs <- installed_pkgs[intersect(used_pkgs, rownames(installed_pkgs)), c("packages.source", "packages.package", "packages.ondiskversion")]
     colnames(reqs) <- c("source", "package", "version")
 
     reqs <- reqs %>%
         separate(source, into = c("src", "src_version"), sep = " ", extra = "merge", remove = FALSE) %>%
         mutate(
-            src_version = stringr::str_extract_all(
+            src_version = str_extract_all(
             src_version,
             "(?<=\\().*?(?=\\))"
         )) %>% mutate(pkg_incl_version = ifelse(src == "CRAN",

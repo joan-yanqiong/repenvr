@@ -2,14 +2,14 @@
 #'
 #' @param path_to_script path to script for which you want the functions
 #' @return list of functions that are not from an existing package
-#' @import NCmisc
+#' @importFrom NCmisc list.functions.in.file
 get_functions_from_unknown_pkgs <- function(path_to_script) {
     # those for which a package could not be found- may be functions within
     # functions, or from packages that aren't loaded.
     if (!file.exists(path_to_script)) {
         stop("File doesn't exist")
     }
-    return(NCmisc::list.functions.in.file(path_to_script)$`character(0)`)
+    return(list.functions.in.file(path_to_script)$`character(0)`)
 }
 
 #' Get functions defined by user
