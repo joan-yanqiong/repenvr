@@ -15,12 +15,18 @@ create_requirements <- function(project_dir, output_dir) {
     all_files <- list.files(project_dir, recursive = TRUE, full.names = TRUE)
     script_files <- all_files[endsWith(all_files, ".R")]
 
+    # Combine loaded, implicitly and explicitly used packages
     implicit_pkgs <- unique(unlist(
         sapply(script_files, get_implicit_pkgs, USE.NAMES = FALSE)
     ))
-    loaded_pkgs <- get_pkgs("loaded")
-    used_pkgs <- unique(c(loaded_pkgs, implicit_pkgs))
 
+    explicit_pkgs <- unique(unlist(
+        sapply(script_files, get_explicit_pkgs, USE.NAMES = FALSE)
+    ))
+    loaded_pkgs <- get_pkgs("loaded")
+    used_pkgs <- unique(c(loaded_pkgs, implicit_pkgs, explicit_pkgs))
+
+    # Compare to the installed packages
     installed_pkgs <- data.frame(session_info())
     reqs <- installed_pkgs[intersect(used_pkgs, rownames(installed_pkgs)), c("packages.source", "packages.package", "packages.ondiskversion")]
     colnames(reqs) <- c("source", "package", "version")
