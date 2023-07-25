@@ -17,3 +17,6 @@ List of the packages where the given function exists
 \description{
 Uses the name of a function to look for the package.
 }
+\examples{
+find_pkg_for_function("read.csv")
+}

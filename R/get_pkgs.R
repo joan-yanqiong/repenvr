@@ -27,7 +27,7 @@ get_installed_pkgs <- function(libpath = .libPaths()) {
 #' @param lib.loc Location of the packages that are installed.
 #'
 #' @return List of the packages where the given function exists
-#' @examples
+#' @examples find_pkg_for_function("read.csv")
 find_pkg_for_function <- function(function_name, lib.loc = .libPaths()) {
     out <- help.search(paste0("^", function_name, "$"),
         agrep = FALSE,

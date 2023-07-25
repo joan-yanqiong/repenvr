@@ -27,10 +27,9 @@ create_requirements <- function(project_dir, output_dir, libpath = .libPaths(), 
     # Compare to the installed packages
     installed_pkgs <- get_installed_pkgs(libpath = libpath)
     used_pkgs_valid <- intersect(used_pkgs, installed_pkgs$Package)
-    print(length(used_pkgs_valid))
     reqs <- installed_pkgs %>% ungroup() %>%
         filter(Package %in% used_pkgs_valid) %>%
-        select(Package, Version, LibPath, pkg_incl_version) %>%
+        select(Package, Version, LibPath, pkg_incl_version, is_github) %>%
         write.csv(paste0(output_dir, "/requirements.csv"))
     if(return_path) {
         return(paste0(output_dir, "/requirements.csv"))
