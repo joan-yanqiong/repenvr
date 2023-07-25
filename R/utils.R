@@ -42,3 +42,28 @@ get_user_functions <- function(path_to_script = NULL, pkgs_to_incl = c("loaded",
 
     return(names(potential_pkgs)[!(potential_pkgs %in% c(incl_pkgs, implicit_pkgs))])
 }
+
+#' Check if package is from GitHub
+#'
+#' @param pkg package name
+#' @return TRUE if package is from GitHub
+#' @examples is_github("tidyverse") # FALSE
+#' is_github("tidyverse/tidyverse") # TRUE
+#' @export
+is_github <- function(pkg) {
+    !is.null(packageDescription(pkg)$GithubRepo)
+}
+#' Get GitHub URL for package
+#'
+#' @param pkg package name
+#' @return GitHub URL for package
+#' @examples get_gh_url("tidyverse") # NULL
+#' @export
+get_gh_url <- function(pkg) {
+    info <- packageDescription(pkg)
+    if (is.null(info$GithubRepo)) {
+        warning("Package is not from GitHub")
+        return(NULL)
+    }
+    return(paste0(info$GithubUsername, "/", info$GithubRepo, "@", info$GithubSHA1))
+}

@@ -1,3 +1,24 @@
+#' Get installed packages
+#'
+#' @param libpath path to library
+#' @return data frame with installed packages
+#' @examples get_installed_pkgs()
+#' @export
+#' @importFrom dplyr %>% mutate rowwise
+get_installed_pkgs <- function(libpath = .libPaths()) {
+    if (!dir.exists(libpath)) {
+        stop("Invalid library path")
+    }
+    installed_pkgs <- data.frame(installed.packages(lib.loc = libpath)) %>%
+        rowwise() %>%
+        mutate(
+            is_github = is_github(Package),
+            pkg_incl_version = ifelse(is_github, get_gh_url(Package), paste0(Package, "@", Version))
+        )
+    return(installed_pkgs)
+}
+
+
 #' Find package of the function
 #'
 #' Uses the name of a function to look for the package.
@@ -7,7 +28,6 @@
 #'
 #' @return List of the packages where the given function exists
 #' @examples
-#' # ADD_EXAMPLES_HERE
 find_pkg_for_function <- function(function_name, lib.loc = .libPaths()) {
     out <- help.search(paste0("^", function_name, "$"),
         agrep = FALSE,

@@ -6,16 +6,13 @@
 #' @return dataframe with requirements
 #' @export
 #' @examples examples create_requirements("~/Coding/R", "~/Coding/reqs")
-#' @importFrom dplyr %>% mutate
-#' @importFrom stringr str_extract_all
-#' @importFrom tidyr separate
-#' @importFrom devtools session_info
-create_requirements <- function(project_dir, output_dir) {
+#' @importFrom dplyr %>% mutate select filter ungroup
+create_requirements <- function(project_dir, output_dir, libpath = .libPaths(), return_path = TRUE) {
     # Load additional libraries
     all_files <- list.files(project_dir, recursive = TRUE, full.names = TRUE)
     script_files <- all_files[endsWith(all_files, ".R")]
 
-    # Combine loaded, implicitly and explicitly used packages
+    # Combine currently loaded, implicitly and explicitly used packages
     implicit_pkgs <- unique(unlist(
         sapply(script_files, get_implicit_pkgs, USE.NAMES = FALSE)
     ))
@@ -24,22 +21,19 @@ create_requirements <- function(project_dir, output_dir) {
         sapply(script_files, get_explicit_pkgs, USE.NAMES = FALSE)
     ))
     loaded_pkgs <- get_pkgs("loaded")
-    used_pkgs <- unique(c(loaded_pkgs, implicit_pkgs, explicit_pkgs))
+
+    used_pkgs <- unique(c(implicit_pkgs, explicit_pkgs))
 
     # Compare to the installed packages
-    installed_pkgs <- data.frame(session_info())
-    reqs <- installed_pkgs[intersect(used_pkgs, rownames(installed_pkgs)), c("packages.source", "packages.package", "packages.ondiskversion")]
-    colnames(reqs) <- c("source", "package", "version")
-
-    reqs <- reqs %>%
-        separate(source, into = c("src", "src_version"), sep = " ", extra = "merge", remove = FALSE) %>%
-        mutate(
-            src_version = str_extract_all(
-            src_version,
-            "(?<=\\().*?(?=\\))"
-        )) %>% mutate(pkg_incl_version = ifelse(src == "CRAN",
-        paste0(package, "@", version), src_version))
-    reqs <- apply(reqs, 2, as.character)
-    write.csv(reqs, paste0(output_dir, "/requirements.csv"))
+    installed_pkgs <- get_installed_pkgs(libpath = libpath)
+    used_pkgs_valid <- intersect(used_pkgs, installed_pkgs$Package)
+    print(length(used_pkgs_valid))
+    reqs <- installed_pkgs %>% ungroup() %>%
+        filter(Package %in% used_pkgs_valid) %>%
+        select(Package, Version, LibPath, pkg_incl_version) %>%
+        write.csv(paste0(output_dir, "/requirements.csv"))
+    if(return_path) {
+        return(paste0(output_dir, "/requirements.csv"))
+    }
     return(reqs)
 }
