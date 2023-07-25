@@ -40,6 +40,6 @@ create_requirements <- function(project_dir, output_dir) {
         )) %>% mutate(pkg_incl_version = ifelse(src == "CRAN",
         paste0(package, "@", version), src_version))
     reqs <- apply(reqs, 2, as.character)
-    write.csv(reqs, paste(output_dir, "/requirements.csv"))
+    write.csv(reqs, paste0(output_dir, "/requirements.csv"))
     return(reqs)
 }
