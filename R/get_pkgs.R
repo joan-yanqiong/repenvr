@@ -46,3 +46,39 @@ get_implicit_pkgs <- function(path_to_script) {
     # Extract packages
     return(parsed_script$text[parsed_script$token == "SYMBOL_PACKAGE"])
 }
+
+#' Extract package from script
+#'
+#' @param pkg_loader package loader (e.g. library, pacman, require)
+#' @param txt text to extract package from
+#'
+#' @return packages
+#' @importFrom stringr str_detect str_extract_all str_split
+extract_pkg_from_script <- function(pkg_loader, txt) {
+    regex_for_parentheses <- "(?<=\\().*?(?=\\))"
+    is_from_loader <- str_detect(txt, pkg_loader)
+    tmp_pkg <- as.vector(str_extract_all(txt[is_from_loader], regex_for_parentheses, simplify = TRUE))
+    has_multi_pkgs <- str_detect(tmp_pkg, ", ")
+    tmp_multi_pkgs <- as.vector(str_split(tmp_pkg[has_multi_pkgs], ", ", simplify = TRUE))
+    return(c(tmp_pkg[!has_multi_pkgs], tmp_multi_pkgs))
+}
+
+#' Get explicit packages that are used
+#'
+#' @param path_to_script path to script for which you want the functions
+#' @return list of packages
+#' @importFrom stringr str_replace_all
+#' @export
+get_explicit_pkgs <- function(path_to_script) {
+    pkg_loaders <- c("library", "pacman", "require")
+
+    # Import lines of code
+    lines_of_script <- readLines(path_to_script, encoding = "UTF-8")
+
+    # remove the single quotes that surround the pkgs
+    str_without_quotes <- str_replace_all(lines_of_script, '\"', "")
+
+    # find out which entries are libraries, pacman, require
+    explicit_pkgs <- lapply(pkg_loaders, extract_pkg_from_script, txt = str_without_quotes)
+    return(unique(do.call(c, explicit_pkgs)))
+}
