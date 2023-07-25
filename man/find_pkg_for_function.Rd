@@ -17,6 +17,3 @@ List of the packages where the given function exists
 \description{
 Uses the name of a function to look for the package.
 }
-\examples{
-# ADD_EXAMPLES_HERE
-}

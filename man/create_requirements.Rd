@@ -4,7 +4,12 @@
 \alias{create_requirements}
 \title{Create requirements file}
 \usage{
-create_requirements(project_dir, output_dir)
+create_requirements(
+  project_dir,
+  output_dir,
+  libpath = .libPaths(),
+  return_path = TRUE
+)
 }
 \arguments{
 \item{project_dir}{path to project directory}
