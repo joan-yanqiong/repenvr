@@ -8,6 +8,7 @@
 #' @examples examples create_requirements("~/Coding/R", "~/Coding/reqs")
 #' @importFrom dplyr %>% mutate select filter ungroup pull rowwise case_when
 #' @importFrom BiocManager available
+#' @importFrom tools CRAN_package_db
 create_requirements <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE) {
     if (!dir.exists(project_dir)) {
         stop("Invalid project path")
@@ -18,7 +19,7 @@ create_requirements <- function(project_dir, output_dir = NULL, libpath = .libPa
     # Add source information
     pkgs_base <- data.frame(installed.packages(priority = "base")) %>% pull(Package)
     pkgs_bioconductor <- available()
-    pkgs_cran <- CRAN_package_db() %>% pull(Package)
+    pkgs_cran <- data.frame(CRAN_package_db()) %>% pull(Package)
 
     # Load additional libraries
     all_files <- list.files(project_dir, recursive = TRUE, full.names = TRUE)
