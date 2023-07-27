@@ -6,7 +6,7 @@
 \usage{
 create_requirements(
   project_dir,
-  output_dir,
+  output_dir = NULL,
   libpath = .libPaths(),
   return_path = TRUE
 )

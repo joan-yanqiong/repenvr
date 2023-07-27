@@ -17,6 +17,7 @@ Imports:
     stringr,
     dplyr,
     tidyr,
+    BiocManager,
 Remotes:
     joan-yanqiong/pak@cran-0.5.1
 Suggests:

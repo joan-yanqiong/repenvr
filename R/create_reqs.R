@@ -6,8 +6,20 @@
 #' @return dataframe with requirements
 #' @export
 #' @examples examples create_requirements("~/Coding/R", "~/Coding/reqs")
-#' @importFrom dplyr %>% mutate select filter ungroup
-create_requirements <- function(project_dir, output_dir, libpath = .libPaths(), return_path = TRUE) {
+#' @importFrom dplyr %>% mutate select filter ungroup pull rowwise case_when
+#' @importFrom BiocManager available
+create_requirements <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE) {
+    if (!dir.exists(project_dir)) {
+        stop("Invalid project path")
+    }
+    if (is.null()) {
+        output_dir <- project_dir
+    }
+    # Add source information
+    pkgs_base <- data.frame(installed.packages(priority = "base")) %>% pull(Package)
+    pkgs_bioconductor <- available()
+    pkgs_cran <- CRAN_package_db() %>% pull(Package)
+
     # Load additional libraries
     all_files <- list.files(project_dir, recursive = TRUE, full.names = TRUE)
     script_files <- all_files[endsWith(all_files, ".R")]
@@ -29,8 +41,14 @@ create_requirements <- function(project_dir, output_dir, libpath = .libPaths(), 
     used_pkgs_valid <- intersect(used_pkgs, installed_pkgs$Package)
     reqs <- installed_pkgs %>% ungroup() %>%
         filter(Package %in% used_pkgs_valid) %>%
-        select(Package, Version, LibPath, pkg_incl_version, is_github) %>%
-        write.csv(paste0(output_dir, "/requirements.csv"))
+        rowwise() %>%
+        mutate(source = case_when(
+                Package %in% pkgs_cran ~ "CRAN",
+                is_github(Package) ~ "GitHub",
+                Package %in% pkgs_base ~ "Base",
+                Package %in% pkgs_bioconductor ~ "Bioconductor",
+                TRUE ~ "Other"
+        )) %>% write.csv(paste0(output_dir, "/requirements.csv"))
     if(return_path) {
         return(paste0(output_dir, "/requirements.csv"))
     }
