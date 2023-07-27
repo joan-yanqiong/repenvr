@@ -12,7 +12,7 @@ create_requirements <- function(project_dir, output_dir = NULL, libpath = .libPa
     if (!dir.exists(project_dir)) {
         stop("Invalid project path")
     }
-    if (is.null()) {
+    if (is.null(output_dir)) {
         output_dir <- project_dir
     }
     # Add source information
