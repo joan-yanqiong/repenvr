@@ -4,7 +4,7 @@
 \alias{install_from_reqs}
 \title{Install packages from a requirements file}
 \usage{
-install_from_reqs(req_path)
+install_from_reqs(req_path, libpath)
 }
 \arguments{
 \item{req_path}{path to requirements file}
