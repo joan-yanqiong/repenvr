@@ -1,3 +1,5 @@
+
+
 #' Create requirements file
 #'
 #' @param project_dir path to project directory
@@ -39,6 +41,11 @@ create_requirements <- function(project_dir, output_dir = NULL, libpath = .libPa
 
     # Compare to the installed packages
     installed_pkgs <- get_installed_pkgs(libpath = libpath)
+
+    # Check if package in used packages are matched to installed packages
+    matched_pkgs <- unlist(sapply(used_pkgs, is_matched_pkg, installed_pkgs = installed_pkgs), use.names = FALSE)
+    used_pkgs <- unique(c(used_pkgs, matched_pkgs))
+
     used_pkgs_valid <- intersect(used_pkgs, installed_pkgs$Package)
     reqs <- installed_pkgs %>% ungroup() %>%
         filter(Package %in% used_pkgs_valid) %>%

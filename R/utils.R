@@ -67,3 +67,25 @@ get_gh_url <- function(pkg) {
     }
     return(paste0(info$GithubUsername, "/", info$GithubRepo, "@", info$GithubSHA1))
 }
+
+#' Valid package
+#'
+#' Check whether a package is valid based on dataframe from get_installed_pkgs.
+#'
+#' @param pkg package name
+#' @param installed_pkgs dataframe from get_installed_pkgs()
+#'
+#' @return package name without version or error if package is not valid
+#' @examples is_matched_pkg("tidyverse", c("tidyverse", "dplyr")) # "tidyverse"
+#' @export
+#' @importFrom stringr str_detect
+is_matched_pkg <- function(pkg, installed_pkgs) {
+    try(
+        expr = {
+            is_valid_pkg <- str_detect(installed_pkgs$pkg_incl_version, pkg)
+            if (sum(is_valid_pkg) > 0) {
+                return(installed_pkgs[is_valid_pkg, "Package"] %>% pull())
+            }
+        }, silent = TRUE
+    )
+}
