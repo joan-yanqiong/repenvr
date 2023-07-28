@@ -18,7 +18,8 @@ Imports:
     dplyr,
     tidyr,
     BiocManager,
-    tools
+    yaml,
+    tools,
 Remotes:
     joan-yanqiong/pak@cran-0.5.1
 Suggests:

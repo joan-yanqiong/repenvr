@@ -4,11 +4,27 @@
 \alias{install_from_reqs}
 \title{Install packages from a requirements file}
 \usage{
-install_from_reqs(req_path, libpath)
+install_from_reqs(
+  req_path,
+  libpath = .libPaths(),
+  upgrade = FALSE,
+  conda_env_path = ""
+)
 }
 \arguments{
 \item{req_path}{path to requirements file}
+
+\item{libpath}{path to library (default = .libPaths())}
+
+\item{upgrade}{upgrade packages (default = FALSE)}
+
+\item{conda_env_path}{path to conda environment file. If provided, remove
+conda packages from packages that need to be installed}
 }
 \description{
-Install packages from a requirements file
+Install packages using a requirements file (csv) using the exact versions,
+except for Bioconductor packages (to be implemented in the future; dependent
+on pak).
+In case you installed packages directly with conda, you can skip those
+packages, then supply \code{conda_env_path}.
 }
