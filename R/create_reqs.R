@@ -7,11 +7,13 @@
 #'
 #' @return dataframe with requirements
 #' @export
-#' @examples examples create_requirements("~/Coding/R", "~/Coding/reqs")
+#' @examples examples create_reqs("~/Coding/R", "~/Coding/reqs")
 #' @importFrom dplyr %>% mutate select filter ungroup pull rowwise case_when
 #' @importFrom BiocManager available
 #' @importFrom tools CRAN_package_db
-create_requirements <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE) {
+create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE) {
+    cols_oi <- c("Package", "Version", "pkg_incl_version", "source")
+
     if (!dir.exists(project_dir)) {
         stop("Invalid project path")
     }
@@ -56,7 +58,8 @@ create_requirements <- function(project_dir, output_dir = NULL, libpath = .libPa
                 Package %in% pkgs_base ~ "Base",
                 Package %in% pkgs_bioconductor ~ "Bioconductor",
                 TRUE ~ "Other"
-        )) %>% write.csv(paste0(output_dir, "/requirements.csv"))
+        )) %>% select(all_of(cols_oi)) %>%
+         write.csv(paste0(output_dir, "/requirements.csv"))
     if(return_path) {
         return(paste0(output_dir, "/requirements.csv"))
     }
