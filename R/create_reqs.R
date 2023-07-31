@@ -12,7 +12,8 @@
 #' @importFrom BiocManager available
 #' @importFrom tools CRAN_package_db
 create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE) {
-    cols_oi <- c("Package", "Version", "pkg_incl_version", "source")
+    # Constants
+    cols_oi <- c("Package", "Version", "pkg_incl_version", "source", "conda_install")
 
     if (!dir.exists(project_dir)) {
         stop("Invalid project path")
@@ -58,8 +59,14 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
                 Package %in% pkgs_base ~ "Base",
                 Package %in% pkgs_bioconductor ~ "Bioconductor",
                 TRUE ~ "Other"
-        )) %>% select(all_of(cols_oi)) %>%
-         write.csv(paste0(output_dir, "/requirements.csv"))
+        ), conda_install = case_when(
+            source == "CRAN" ~ glue("r-{tolower(Package)}={Version}"),
+            source == "Bioconductor" ~ glue("bioconductor-{tolower(Package)}={Version}"),
+            .default = "non-conda",
+            )
+        ) %>%
+        select(all_of(cols_oi)) %>%
+        write.csv(paste0(output_dir, "/requirements.csv"))
     if(return_path) {
         return(paste0(output_dir, "/requirements.csv"))
     }
