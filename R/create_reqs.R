@@ -26,12 +26,9 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
     # Obtain the available bioconductor packages
     if (!is_offline) {
         if (has_internet()) {
-            available_bioconductor_packages <- available()
+            pkgs_bioconductor <- available()
             pkgs_cran <- data.frame(CRAN_package_db()) %>% pull(Package)
         }
-    } else {
-        data(pkgs_cran)
-        data(available_bioconductor_packages)
     }
 
     # Obtain the files to scan for packages, only use R and rmarkdown files Rmd files
@@ -65,7 +62,7 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
                 is_github(Package) ~ "GitHub",
                 Package %in% pkgs_cran ~ "CRAN",
                 Package %in% pkgs_base ~ "Base",
-                Package %in% available_bioconductor_packages ~ "Bioconductor",
+                Package %in% pkgs_bioconductor ~ "Bioconductor",
                 TRUE ~ "Other"
         ), conda_install = case_when(
             source == "CRAN" ~ glue::glue("r-{tolower(Package)}={Version}"),
