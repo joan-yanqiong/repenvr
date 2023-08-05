@@ -29,6 +29,9 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
             available_bioconductor_packages <- available()
             pkgs_cran <- data.frame(CRAN_package_db()) %>% pull(Package)
         }
+    } else {
+        data(pkgs_cran)
+        data(available_bioconductor_packages)
     }
 
     # Obtain the files to scan for packages, only use R and rmarkdown files Rmd files
