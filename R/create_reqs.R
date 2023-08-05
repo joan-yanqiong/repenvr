@@ -9,6 +9,7 @@
 #' @importFrom dplyr %>% mutate select filter ungroup pull rowwise case_when
 #' @importFrom BiocManager available
 #' @importFrom tools CRAN_package_db
+#' @importFrom curl has_internet
 create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE) {
     # Constants
     cols_oi <- c("Package", "Version", "pkg_incl_version", "source", "conda_install")
@@ -21,11 +22,17 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
     }
     # Add source information
     pkgs_base <- data.frame(installed.packages(priority = "base")) %>% pull(Package)
-    pkgs_bioconductor <- available()
+
+    # Obtain the available bioconductor packages
+    if (has_internet()) {
+        available_bioconductor_packages <- available()
+    } else {
+        data(available_bioconductor_packages)
+    }
     pkgs_cran <- data.frame(CRAN_package_db()) %>% pull(Package)
 
-    # Load additional libraries
-    all_files <- list.files(project_dir, recursive = TRUE, full.names = TRUE)
+    # Obtain the files to scan for packages, only use R and rmarkdown files Rmd files
+    all_files <- list.files(project_dir, recursive = TRUE, full.names = TRUE, pattern = ".*\\.(R|Rmd)$")
     script_files <- all_files[endsWith(all_files, ".R")]
 
     # Combine currently loaded, implicitly and explicitly used packages
@@ -55,7 +62,7 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
                 is_github(Package) ~ "GitHub",
                 Package %in% pkgs_cran ~ "CRAN",
                 Package %in% pkgs_base ~ "Base",
-                Package %in% pkgs_bioconductor ~ "Bioconductor",
+                Package %in% available_bioconductor_packages ~ "Bioconductor",
                 TRUE ~ "Other"
         ), conda_install = case_when(
             source == "CRAN" ~ glue("r-{tolower(Package)}={Version}"),

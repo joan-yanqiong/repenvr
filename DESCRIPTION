@@ -20,8 +20,12 @@ Imports:
     BiocManager,
     yaml,
     tools,
+    curl
 Remotes:
     joan-yanqiong/pak@cran-0.5.1
 Suggests:
     testthat,
     lintr
+Depends:
+    R (>= 2.10)
+LazyData: true
