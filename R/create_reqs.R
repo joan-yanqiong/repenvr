@@ -25,7 +25,9 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
 
     # Obtain the available bioconductor packages
     if (is_offline) {
-        data(available_bioconductor_packages)
+        # data(available_bioconductor_packages)
+        load("data/available_bioconductor_packages.rda")
+
 
     } else {
         if (has_internet()) {
