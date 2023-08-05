@@ -8,7 +8,8 @@ create_reqs(
   project_dir,
   output_dir = NULL,
   libpath = .libPaths(),
-  return_path = TRUE
+  return_path = TRUE,
+  is_offline = TRUE
 )
 }
 \arguments{

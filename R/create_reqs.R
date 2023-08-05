@@ -10,7 +10,7 @@
 #' @importFrom BiocManager available
 #' @importFrom tools CRAN_package_db
 #' @importFrom curl has_internet
-create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE) {
+create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE, is_offline = TRUE) {
     # Constants
     cols_oi <- c("Package", "Version", "pkg_incl_version", "source", "conda_install")
 
@@ -24,10 +24,15 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
     pkgs_base <- data.frame(installed.packages(priority = "base")) %>% pull(Package)
 
     # Obtain the available bioconductor packages
-    if (has_internet()) {
-        available_bioconductor_packages <- available()
-    } else {
+    if (is_offline) {
         data(available_bioconductor_packages)
+
+    } else {
+        if (has_internet()) {
+            available_bioconductor_packages <- available()
+        } else {
+            data(available_bioconductor_packages)
+        }
     }
     pkgs_cran <- data.frame(CRAN_package_db()) %>% pull(Package)
 
