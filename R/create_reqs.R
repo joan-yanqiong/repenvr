@@ -24,16 +24,9 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
     pkgs_base <- data.frame(installed.packages(priority = "base")) %>% pull(Package)
 
     # Obtain the available bioconductor packages
-    if (is_offline) {
-        # data(available_bioconductor_packages)
-        load("data/available_bioconductor_packages.rda")
-
-
-    } else {
+    if (!is_offline) {
         if (has_internet()) {
             available_bioconductor_packages <- available()
-        } else {
-            data(available_bioconductor_packages)
         }
     }
     pkgs_cran <- data.frame(CRAN_package_db()) %>% pull(Package)
