@@ -20,7 +20,8 @@ Imports:
     BiocManager,
     yaml,
     tools,
-    curl
+    curl,
+    glue
 Remotes:
     joan-yanqiong/pak@cran-0.5.1
 Suggests:

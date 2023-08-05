@@ -10,6 +10,7 @@
 #' @importFrom BiocManager available
 #' @importFrom tools CRAN_package_db
 #' @importFrom curl has_internet
+#' @importFrom glue glue
 create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE, is_offline = TRUE) {
     # Constants
     cols_oi <- c("Package", "Version", "pkg_incl_version", "source", "conda_install")
