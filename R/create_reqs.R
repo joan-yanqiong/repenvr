@@ -31,8 +31,6 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
         }
     }
 
-    pkgs_cran <- data.frame(CRAN_package_db()) %>% pull(Package)
-
     # Obtain the files to scan for packages, only use R and rmarkdown files Rmd files
     all_files <- list.files(project_dir, recursive = TRUE, full.names = TRUE, pattern = ".*\\.(R|Rmd)$")
     script_files <- all_files[endsWith(all_files, ".R")]
