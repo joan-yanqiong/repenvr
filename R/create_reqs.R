@@ -10,7 +10,6 @@
 #' @importFrom BiocManager available
 #' @importFrom tools CRAN_package_db
 #' @importFrom curl has_internet
-#' @importFrom glue glue
 create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE, is_offline = TRUE) {
     # Constants
     cols_oi <- c("Package", "Version", "pkg_incl_version", "source", "conda_install")
@@ -71,8 +70,8 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
                 Package %in% available_bioconductor_packages ~ "Bioconductor",
                 TRUE ~ "Other"
         ), conda_install = case_when(
-            source == "CRAN" ~ glue("r-{tolower(Package)}={Version}"),
-            source == "Bioconductor" ~ glue("bioconductor-{tolower(Package)}={Version}"),
+            source == "CRAN" ~ glue::glue("r-{tolower(Package)}={Version}"),
+            source == "Bioconductor" ~ glue::glue("bioconductor-{tolower(Package)}={Version}"),
             .default = "non-conda",
             )
         ) %>%
