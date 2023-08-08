@@ -21,7 +21,9 @@ Imports:
     yaml,
     tools,
     curl,
-    glue
+    glue,
+    argparse,
+    log4r
 Remotes:
     joan-yanqiong/pak@cran-0.5.1
 Suggests:

@@ -32,7 +32,7 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
     }
 
     # Obtain the files to scan for packages, only use R and rmarkdown files Rmd files
-    all_files <- list.files(project_dir, recursive = TRUE, full.names = TRUE, pattern = ".*\\.(R|Rmd)$")
+    all_files <- list.files(project_dir, recursive = TRUE, full.names = TRUE)
     script_files <- all_files[endsWith(all_files, ".R")]
 
     # Combine currently loaded, implicitly and explicitly used packages
