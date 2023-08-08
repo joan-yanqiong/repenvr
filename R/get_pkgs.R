@@ -12,8 +12,8 @@ get_installed_pkgs <- function(libpath = .libPaths()) {
     installed_pkgs <- data.frame(installed.packages(lib.loc = libpath)) %>%
         rowwise() %>%
         mutate(
-            is_github = is_github(Package),
-            pkg_incl_version = ifelse(is_github, get_gh_url(Package), paste0(Package, "@", Version))
+            is_github = is_github_pkg(Package, libpath),
+            pkg_incl_version = ifelse(is_github, get_gh_url(Package, libpath), paste0(Package, "@", Version))
         )
     return(installed_pkgs)
 }
