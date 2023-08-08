@@ -2,7 +2,5 @@
 **.DS_Store
 .vscode/
 /scripts
-R/logging.R
-# R/utils.R
 /tests
 .history
