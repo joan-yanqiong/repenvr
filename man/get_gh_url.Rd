@@ -4,10 +4,12 @@
 \alias{get_gh_url}
 \title{Get GitHub URL for package}
 \usage{
-get_gh_url(pkg)
+get_gh_url(pkg, libpath = .libPaths())
 }
 \arguments{
 \item{pkg}{package name}
+
+\item{libpath}{path to library}
 }
 \value{
 GitHub URL for package
