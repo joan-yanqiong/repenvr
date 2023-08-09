@@ -9,13 +9,22 @@ create_reqs(
   output_dir = NULL,
   libpath = .libPaths(),
   return_path = TRUE,
-  is_offline = TRUE
+  is_offline = TRUE,
+  installed_pkgs
 )
 }
 \arguments{
 \item{project_dir}{path to project directory}
 
 \item{output_dir}{path to output directory where requirements file will be saved}
+
+\item{libpath}{path to library with installed packages}
+
+\item{return_path}{whether to return path to requirements file}
+
+\item{is_offline}{whether to run in offline mode, by 1 (TRUE; default) and 0 = FALSE}
+
+\item{installed_pkgs}{path to installed packages}
 }
 \value{
 dataframe with requirements

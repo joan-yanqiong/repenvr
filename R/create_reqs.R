@@ -2,7 +2,10 @@
 #'
 #' @param project_dir path to project directory
 #' @param output_dir path to output directory where requirements file will be saved
-#'
+#' @param libpath path to library with installed packages
+#' @param return_path whether to return path to requirements file
+#' @param is_offline whether to run in offline mode, by 1 (TRUE; default) and 0 = FALSE
+#' @param installed_pkgs path to installed packages
 #' @return dataframe with requirements
 #' @export
 #' @examples examples create_reqs("~/Coding/R", "~/Coding/reqs")
@@ -10,7 +13,7 @@
 #' @importFrom BiocManager available
 #' @importFrom tools CRAN_package_db
 #' @importFrom curl has_internet
-create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE, is_offline = TRUE) {
+create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE, is_offline = TRUE, installed_pkgs) {
     # Constants
     cols_oi <- c("Package", "Version", "pkg_incl_version", "source", "conda_install")
 
@@ -48,8 +51,11 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
     used_pkgs <- unique(c(implicit_pkgs, explicit_pkgs))
 
     # Compare to the installed packages
-    installed_pkgs <- get_installed_pkgs(libpath = libpath)
-
+    if (!installed_pkgs) {
+        installed_pkgs <- get_installed_pkgs(libpath = libpath)
+    } else {
+        installed_pkgs <- readRDS(installed_pkgs)
+    }
     # Check if package in used packages are matched to installed packages
     matched_pkgs <- unlist(sapply(used_pkgs, is_matched_pkg, installed_pkgs = installed_pkgs), use.names = FALSE)
     used_pkgs <- unique(c(used_pkgs, matched_pkgs))
