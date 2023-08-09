@@ -10,7 +10,7 @@ create_reqs(
   libpath = .libPaths(),
   return_path = TRUE,
   is_offline = TRUE,
-  installed_pkgs
+  installed_pkgs = NULL
 )
 }
 \arguments{

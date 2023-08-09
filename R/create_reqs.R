@@ -13,7 +13,7 @@
 #' @importFrom BiocManager available
 #' @importFrom tools CRAN_package_db
 #' @importFrom curl has_internet
-create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE, is_offline = TRUE, installed_pkgs) {
+create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE, is_offline = TRUE, installed_pkgs = NULL) {
     # Constants
     cols_oi <- c("Package", "Version", "pkg_incl_version", "source", "conda_install")
 
@@ -51,10 +51,12 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
     used_pkgs <- unique(c(implicit_pkgs, explicit_pkgs))
 
     # Compare to the installed packages
-    if (!installed_pkgs) {
+    if (is.null(installed_pkgs)) {
         installed_pkgs <- get_installed_pkgs(libpath = libpath)
-    } else {
+    } else if (file.exists(installed_pkgs)) {
         installed_pkgs <- readRDS(installed_pkgs)
+    } else {
+        stop("Invalid path to installed packages")
     }
     # Check if package in used packages are matched to installed packages
     matched_pkgs <- unlist(sapply(used_pkgs, is_matched_pkg, installed_pkgs = installed_pkgs), use.names = FALSE)
