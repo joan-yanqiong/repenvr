@@ -53,7 +53,7 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
     # Compare to the installed packages
     if (is.null(installed_pkgs_path)) {
         installed_pkgs <- get_installed_pkgs(libpath = libpath)
-    } else if (file.exists(installed_pkgs)) {
+    } else if (file.exists(installed_pkgs_path)) {
         installed_pkgs <- readRDS(installed_pkgs_path)
     } else {
         stop("Invalid path to installed packages")
