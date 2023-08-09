@@ -67,7 +67,7 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
         filter(Package %in% used_pkgs_valid) %>%
         rowwise() %>%
         mutate(source = case_when(
-                is_github_pkg(Package, libpath) ~ "GitHub",
+                is_github ~ "GitHub",
                 Package %in% pkgs_cran ~ "CRAN",
                 Package %in% pkgs_base ~ "Base",
                 Package %in% pkgs_bioconductor ~ "Bioconductor",
