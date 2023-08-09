@@ -10,7 +10,7 @@ create_reqs(
   libpath = .libPaths(),
   return_path = TRUE,
   is_offline = TRUE,
-  installed_pkgs = NULL
+  installed_pkgs_path = NULL
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ create_reqs(
 
 \item{is_offline}{whether to run in offline mode, by 1 (TRUE; default) and 0 = FALSE}
 
-\item{installed_pkgs}{path to installed packages}
+\item{installed_pkgs_path}{path to installed packages}
 }
 \value{
 dataframe with requirements

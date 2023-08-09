@@ -5,7 +5,7 @@
 #' @param libpath path to library with installed packages
 #' @param return_path whether to return path to requirements file
 #' @param is_offline whether to run in offline mode, by 1 (TRUE; default) and 0 = FALSE
-#' @param installed_pkgs path to installed packages
+#' @param installed_pkgs_path path to installed packages
 #' @return dataframe with requirements
 #' @export
 #' @examples examples create_reqs("~/Coding/R", "~/Coding/reqs")
@@ -13,7 +13,7 @@
 #' @importFrom BiocManager available
 #' @importFrom tools CRAN_package_db
 #' @importFrom curl has_internet
-create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE, is_offline = TRUE, installed_pkgs = NULL) {
+create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), return_path = TRUE, is_offline = TRUE, installed_pkgs_path = NULL) {
     # Constants
     cols_oi <- c("Package", "Version", "pkg_incl_version", "source", "conda_install")
 
@@ -51,10 +51,10 @@ create_reqs <- function(project_dir, output_dir = NULL, libpath = .libPaths(), r
     used_pkgs <- unique(c(implicit_pkgs, explicit_pkgs))
 
     # Compare to the installed packages
-    if (is.null(installed_pkgs)) {
+    if (is.null(installed_pkgs_path)) {
         installed_pkgs <- get_installed_pkgs(libpath = libpath)
     } else if (file.exists(installed_pkgs)) {
-        installed_pkgs <- readRDS(installed_pkgs)
+        installed_pkgs <- readRDS(installed_pkgs_path)
     } else {
         stop("Invalid path to installed packages")
     }
